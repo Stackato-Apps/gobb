@@ -37,13 +37,17 @@ func GetDbSession() *gorp.DbMap {
 		db_port = "5432"
 	}
 
-	db, err := sql.Open("postgres",
-		"user="+db_username+
-			" password="+db_password+
-			" dbname="+db_database+
-			" host="+db_hostname+
-			" port="+db_port+
-			" sslmode=disable")
+        data_source := os.Getenv("DATABASE_URL")
+        if data_source == "" {
+                data_source = "user=" + db_username +
+                        " password=" + db_password +
+                        " dbname=" + db_database +
+                        " host=" + db_hostname +
+                        " port=" + db_port +
+                        " sslmode=disable"
+        }
+
+        db, err := sql.Open("postgres", data_source)
 
 	if err != nil {
 		fmt.Printf("Cannot open database! Error: %s\n", err.Error())

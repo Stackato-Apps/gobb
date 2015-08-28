@@ -10,6 +10,7 @@ import (
 	"github.com/stevenleeg/gobb/utils"
 	"go/build"
 	"net/http"
+        "os"
 	"path/filepath"
 )
 
@@ -68,6 +69,9 @@ func main() {
 	if selected_template == "default" {
 		pkg, _ := build.Import("github.com/stevenleeg/gobb/gobb", ".", build.FindOnly)
 		static_path := filepath.Join(pkg.SrcRoot, pkg.ImportPath, "../templates")
+                if utils.RunWithoutGoenv {
+                        static_path = filepath.Join(utils.Buildpath, "templates")
+                }
 		r.PathPrefix("/static/").Handler(http.FileServer(http.Dir(static_path)))
 	} else {
 		static_path := filepath.Join(base_path, "templates", selected_template)
@@ -82,7 +86,10 @@ func main() {
 
 	http.Handle("/", r)
 
-	port, err := config.Config.GetString("gobb", "port")
+        port := os.Getenv("PORT")
+        if port == "" {
+                port, _ = config.Config.GetString("gobb", "port")
+        }
 	fmt.Println("[notice] Starting server on port " + port)
 	http.ListenAndServe(":"+port, nil)
 }

@@ -128,6 +128,9 @@ func RenderTemplate(
 	if selected_template == "default" {
 		pkg, _ := build.Import("github.com/stevenleeg/gobb/gobb", ".", build.FindOnly)
 		base_path = filepath.Join(pkg.SrcRoot, pkg.ImportPath, "../templates/")
+                if RunWithoutGoenv {
+                        base_path = filepath.Join(Buildpath, "templates")
+                }
 	} else {
 		base_path, _ = config.Config.GetString("gobb", "base_path")
 		base_path = filepath.Join(base_path, "templates", selected_template)

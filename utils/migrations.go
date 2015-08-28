@@ -24,6 +24,9 @@ func generateGooseDbConf() *goose.DBConf {
 	db_hostname, _ := config.Config.GetString("database", "hostname")
 	db_port, _ := config.Config.GetString("database", "port")
 	migrations_path := filepath.Join(pkg.SrcRoot, pkg.ImportPath, "../db/migrations")
+        if RunWithoutGoenv {
+                migrations_path = filepath.Join(Buildpath, "db", "migrations")
+        }
 
 	db_env_hostname, _ := config.Config.GetString("database", "env_hostname")
 	db_env_port, _ := config.Config.GetString("database", "env_port")
@@ -40,12 +43,17 @@ func generateGooseDbConf() *goose.DBConf {
 		db_port = "5432"
 	}
 
+        openstr := os.Getenv("DATABASE_URL")
+        if openstr == "" {
+                openstr = fmt.Sprintf("user=%s dbname=%s password=%s port=%s host=%s sslmode=disable", db_username, db_database, db_password, db_port, db_hostname)
+        }
+
 	goose_conf = &goose.DBConf{
 		MigrationsDir: migrations_path,
 		Env:           "development",
 		Driver: goose.DBDriver{
 			Name:    "postgres",
-			OpenStr: fmt.Sprintf("user=%s dbname=%s password=%s port=%s host=%s sslmode=disable", db_username, db_database, db_password, db_port, db_hostname),
+                        OpenStr: openstr,
 			Import:  "github.com/lib/pq",
 			Dialect: &goose.PostgresDialect{},
 		},

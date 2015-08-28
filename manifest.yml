@@ -1,0 +1,8 @@
+applications:
+- name: gobb
+  env:
+    RUN_WITHOUT_GOENV: true
+  mem: 256M
+  services:
+    ${name}-db:
+      type: postgresql
