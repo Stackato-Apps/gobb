@@ -1,6 +1,8 @@
 applications:
 - name: gobb
+  buildpack: https://github.com/cloudfoundry/go-buildpack#v1.3.1
   env:
+    GOVERSION: 1.4.2
     RUN_WITHOUT_GOENV: true
   mem: 256M
   services:
