@@ -8,7 +8,7 @@ GoBB is getting better by the day, so hopefully it'll be ready to graduate from 
 
 ![Screenshot](http://imgur.com/JFSzskx.png)
 
-## Deploying to Stackato
+## Deploying to HPE Helion Stackato
 Based on [this post](http://blog.cloudfoundry.gr.jp/2015/07/cf100apps-031-gobb.html) from the Cloud Foundry 100 Day Challenge.
 
 ```
