@@ -4,7 +4,7 @@ applications:
   env:
     GOVERSION: 1.4.2
     RUN_WITHOUT_GOENV: true
-  mem: 256M
+  memory: 256M
   services:
     ${name}-db:
       type: postgresql
